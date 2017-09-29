@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
-import { AuthService } from '../../services';
+import { AuthService, AuthTypeEnum } from '../../services';
+
+import { HomePage } from '../home/home';
 
 @Component({
   selector: 'page-login',
@@ -13,11 +15,13 @@ export class LoginPage {
 
   ionViewDidLoad() {
     console.log('LoginPage');
+    this.authService.setLoginType(AuthTypeEnum.google);
   }
 
   login() {
     this.authService.login()
       .then(() => {
+        this.navCtrl.setRoot(HomePage);
         console.log(this.authService.userData);
       });
   }
