@@ -22,7 +22,7 @@ export class LoginPage {
     this.authService.login()
       .then(() => {
         this.navCtrl.setRoot(HomePage);
-        console.log(this.authService.userData);
+        console.log(this.authService.userData.email);
       });
   }
 

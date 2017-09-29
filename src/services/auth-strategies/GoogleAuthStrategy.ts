@@ -10,12 +10,15 @@ export class GoogleAuthStrategy implements IAuthStrategy {
 
   constructor(public afAuth: AngularFireAuth) {}
 
-  login(): firebase.Promise<any> {
-    return this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+  login(): Promise<firebase.User> {
+    return <Promise<firebase.User>>this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .then((userCredentials) => {
+        return userCredentials.user;
+      });
   }
 
-  logout(): firebase.Promise<any> {
-    return this.afAuth.auth.signOut();
+  logout(): Promise<void> {
+    return <Promise<void>>this.afAuth.auth.signOut();
   }
 
 }

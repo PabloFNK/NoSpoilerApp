@@ -1,4 +1,6 @@
+import * as firebase from 'firebase/app';
+
 export interface IAuthStrategy {
-  login();
-  logout();
+  login(): Promise<firebase.User>;
+  logout(): Promise<void>;
 }

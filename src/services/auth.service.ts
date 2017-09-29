@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { IAuthStrategy, GoogleAuthStrategy } from './auth-strategies';
 
+import { User } from '../models';
+
 export enum AuthTypeEnum {
   google,
   facebook,
@@ -11,9 +13,9 @@ export enum AuthTypeEnum {
 @Injectable()
 export class AuthService {
 
-  private _userData = null;
+  private _userData: User = null;
 
-  public get userData() {
+  public get userData(): User {
     return this._userData;
   }
 
@@ -31,14 +33,15 @@ export class AuthService {
     this.authStrategy = this.authStrategyMap[loginType];
   }
 
-  public login(): Promise<any> {
+  public login(): Promise<User> {
     return this.authStrategy.login()
       .then((userCredentials) => {
-        this._userData = userCredentials;
+        this._userData = userCredentials as User;
+        return this._userData;
       });
   }
 
-  public logout(): Promise<any> {
+  public logout(): any {
     return this.authStrategy.logout()
       .then(() => {
         this._userData = null;
