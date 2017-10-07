@@ -1,0 +1,21 @@
+page-login.ion-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  padding: 20px;
+
+  .app-logo {
+    font-size: 50px;
+    text-align: center;
+  }
+
+  .login__button {
+    width: 100%;
+  }
+
+  .social-login__button {
+    width: 100%;
+  }
+}
+

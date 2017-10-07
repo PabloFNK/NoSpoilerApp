@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IAuthStrategy, GoogleAuthStrategy } from './auth-strategies';
+import { IAuthStrategy, GoogleAuthStrategy, EmailAuthStrategy } from './auth-strategies';
 
 import { User } from '../models';
 
@@ -22,19 +22,21 @@ export class AuthService {
   private authStrategyMap;
   private authStrategy: IAuthStrategy;
 
-  constructor(private googleAuthStrategy: GoogleAuthStrategy) {
+  constructor(private googleAuthStrategy: GoogleAuthStrategy, private emailAuthStrategy: EmailAuthStrategy) {
     this.authStrategyMap = {
-      [AuthTypeEnum.google]: this.googleAuthStrategy
+      [AuthTypeEnum.google]: this.googleAuthStrategy,
+      [AuthTypeEnum.email]: this.emailAuthStrategy,
+      'default': this.googleAuthStrategy
     };
   }
 
   public setLoginType(loginType: AuthTypeEnum): void {
     console.log(loginType);
-    this.authStrategy = this.authStrategyMap[loginType];
+    this.authStrategy = this.authStrategyMap[loginType] || this.authStrategyMap['default'];
   }
 
-  public login(): Promise<User> {
-    return this.authStrategy.login()
+  public login(user?: string, password?: string): Promise<User> {
+    return this.authStrategy.login(user, password)
       .then((userCredentials) => {
         this._userData = userCredentials as User;
         return this._userData;
@@ -46,6 +48,10 @@ export class AuthService {
       .then(() => {
         this._userData = null;
       });
+  }
+
+  public register(user: string, password: string) {
+    return (<EmailAuthStrategy>this.authStrategy).register(user, password);
   }
 
 }

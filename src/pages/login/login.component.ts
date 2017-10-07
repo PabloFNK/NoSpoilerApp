@@ -4,6 +4,7 @@ import { NavController } from 'ionic-angular';
 import { AuthService, AuthTypeEnum } from '../../services';
 
 import { HomePage } from '../home/home';
+import { RegisterPage } from '../register/register.component';
 
 @Component({
   selector: 'page-login',
@@ -11,14 +12,14 @@ import { HomePage } from '../home/home';
 })
 export class LoginPage {
 
-  constructor(public navCtrl: NavController, public authService: AuthService) {}
+  protected authTypeEnum;
 
-  ionViewDidLoad() {
-    console.log('LoginPage');
-    this.authService.setLoginType(AuthTypeEnum.google);
+  constructor(public navCtrl: NavController, public authService: AuthService) {
+    this.authTypeEnum = AuthTypeEnum;
   }
 
-  login() {
+  login(authStrategy: AuthTypeEnum): void {
+    this.authService.setLoginType(authStrategy);
     this.authService.login()
       .then(() => {
         this.navCtrl.setRoot(HomePage);
@@ -26,8 +27,12 @@ export class LoginPage {
       });
   }
 
-  logout() {
+  logout(): void {
     this.authService.logout();
+  }
+
+  goToRegister(): void {
+    this.navCtrl.push(RegisterPage);
   }
 
 }
